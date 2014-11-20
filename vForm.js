@@ -80,6 +80,7 @@
 	
 	//清空tip
 	$.vForm.clearTips = function(target, border){
+		var tip = $('#form_tip_cover'); //提示层
 		tip.remove();
 		if(target.length && target[0].tagName === 'INPUT' && typeof(border) === 'undefined'){
 			target.removeAttr('style');
@@ -163,23 +164,26 @@
 				return b;
 			}
 		};
-		//事件绑定
 		//绑定提交
 		$(o.delegate).on('submit', t, function(e){
 											   
-			var _subbtn = t.find('input[type="submit"]').first();
-			_subbtn.data('initval', _subbtn.val());
+			var sbtn = t.find('input[type="submit"]').first();
+			sbtn.data('initval', sbtn.val());
 			
 			if(!t.data('vStatus')){
 				e.preventDefault();
 				var ary = [];
 				var n = 0;
 				for(var _i = 0; _i < o.item.length; _i++){
-					var _target = t.find(o.item[_i][0]);
+					var _targets = t.find(o.item[_i][0]);
 					var reg = o.item[_i][1];
-					!_target.hasClass('disabled') && ary.push(t.verification(_target, reg, o.item[_i][2]));
-					if(o.debug){
-						console.log(_target, t.verification(_target, reg, o.item[_i][2]));
+					for(var _y = 0; _y < _targets.length; _y++){
+						var _target = _targets.eq(_y);
+						console.log(_target.hasClass('disabled'));
+						!_target.hasClass('disabled') && ary.push(t.verification(_target, reg, o.item[_i][2]));
+						if(o.debug){
+							console.log(_target, t.verification(_target, reg, o.item[_i][2]));
+						}
 					}
 				}
 				t.find('[data-empty]').not('.disabled').each(function(){
@@ -202,13 +206,13 @@
 				if(!n && vfuc){
 					//验证通过
 					//禁用按钮
-					_subbtn.addClass('disabled').val('正在' + _subbtn.data('initval') + '...').attr('disabled', 'disabled');
+					sbtn.addClass('disabled').val('正在' + sbtn.data('initval') + '...').attr('disabled', 'disabled');
 					if(typeof(o.submitCallback) === 'function'){
-						o.submitCallback(t, _subbtn, function(){
-							_subbtn.removeClass('disabled').val(_subbtn.data('initval')).removeAttr('disabled');
+						o.submitCallback(t, sbtn, function(){
+							sbtn.removeClass('disabled').val(sbtn.data('initval')).removeAttr('disabled');
 						});
 						setTimeout(function(){
-							_subbtn.removeClass('disabled').val(_subbtn.data('initval')).removeAttr('disabled');			
+							sbtn.removeClass('disabled').val(sbtn.data('initval')).removeAttr('disabled');			
 						}, 1000*10); //10秒之后解禁按钮
 					}else{
 						t.data('vStatus', true).submit();
