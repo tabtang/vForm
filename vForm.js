@@ -179,7 +179,6 @@
 					var reg = o.item[_i][1];
 					for(var _y = 0; _y < _targets.length; _y++){
 						var _target = _targets.eq(_y);
-						console.log(_target.hasClass('disabled'));
 						!_target.hasClass('disabled') && ary.push(t.verification(_target, reg, o.item[_i][2]));
 						if(o.debug){
 							console.log(_target, t.verification(_target, reg, o.item[_i][2]));
