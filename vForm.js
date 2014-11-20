@@ -39,7 +39,6 @@
 	//提示函数
 	$.vForm.tips = function(b, target, msg, theme){
 		var o = this.o || {};
-		var parent = $('body');
 		var tip = $('#form_tip_cover'); //提示层
 		o.tipsTheme = theme || o.tipsTheme;
 		
