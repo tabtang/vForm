@@ -12,8 +12,6 @@
 		]
 	});
 */
-define(function (require, exports, module) {
-
 (function($){
 
 	$.vForm = function(){};
@@ -42,14 +40,13 @@ define(function (require, exports, module) {
 	$.vForm.tips = function(b, target, msg, theme){
 		var o = this.o || {};
 		var parent = $('body');
-		var tip = parent.find('.form_tip');
+		var tip = $('#form_tip_cover'); //提示层
 		o.tipsTheme = theme || o.tipsTheme;
 		
 		toBody_handle();
 				
-		//处理提示消息-插入到body的
+		//提示消息(append to body)
 		function toBody_handle(){
-			tip = $('#form_tip_cover');
 			if(!b){
 				//show
 				(!!target.length && (target[0].tagName === 'INPUT' || target[0].tagName === 'SELECT' || target[0].tagName === 'TEXTAREA')) && target.css({
@@ -65,6 +62,7 @@ define(function (require, exports, module) {
 				}, 3*1000);
 			}else{
 				//hide
+				tip.hide();
 				target[0].tagName === 'INPUT' && target.removeAttr('style');
 			}
 		}
@@ -83,11 +81,7 @@ define(function (require, exports, module) {
 	
 	//清空tip
 	$.vForm.clearTips = function(target, border){
-		if(!target.length){
-			return false;	
-		}
-		var parent = $('body');
-		parent.find('.form_tip').remove();
+		tip.remove();
 		if(target.length && target[0].tagName === 'INPUT' && typeof(border) === 'undefined'){
 			target.removeAttr('style');
 		}
@@ -140,7 +134,7 @@ define(function (require, exports, module) {
 			var errorFn = function(_b){
 				if(!_b){
 					//若当前节点没有data-error属性则到同级节点上取
-					t.tips.call(t, _b, target, target.data('error') ? target.data('error'): target.siblings('[data-error]').data('error'));
+					t.tips.call(t, false, target, target.data('error') ? target.data('error'): target.siblings('[data-error]').data('error'));
 				}else{
 					t.tips.call(t, true, target);
 				}
@@ -258,5 +252,3 @@ define(function (require, exports, module) {
 	};
 
 })($);
-
-});
